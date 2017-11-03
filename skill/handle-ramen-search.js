@@ -88,7 +88,7 @@ module.exports = class HandlePizzaOrder {
       "address":context.confirmed.address,
       "hit_per_page":1,
       "category_l":"RSFST08000",  // 大業態コード(ラーメン)
-      "freeword":context.confirmed.genre,
+      "freeword":context.confirmed.genre.data,
       "freeword_condition":1
     };
     var options = {
