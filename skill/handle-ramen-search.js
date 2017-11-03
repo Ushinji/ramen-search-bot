@@ -30,7 +30,7 @@ module.exports = class HandlePizzaOrder {
 
   // パラメーターが全部揃ったら実行する処理を記述します。
   finish(bot, event, context, resolve, reject){
-    console.log("context:" + context);
+    console.log("context:" + context.confirmed.address + "," + context.confirmed.genre);
     gnaviSearch(context, function(result){
       let message = {
           text:`こちらはいかがですか？\n【お店】${result['name']}\n【営業時間】${result['opentime']}`
@@ -46,13 +46,14 @@ module.exports = class HandlePizzaOrder {
   gnaviSearch(context, callback){
     var result = {};
     var options = createGnaviOptions(context);
+    console.log("options:" + options);
     request.get(options, function (error, response, body) {
       if (!error && response.statusCode == 200){
         if('error' in body){
             console.log("検索エラー" + JSON.stringify(body));
             return;
         }
-        console.log("body.rest:\n" + body.rest);
+        console.log("body.rest:\n" + body.rest.name);
         // 店名
         if('name' in body.rest){
             result['name'] = body.rest.name;
