@@ -46,6 +46,7 @@ module.exports = class HandlePizzaOrder {
   gnaviSearch(context, callback){
     var result = {};
     var options = this.createGnaviOptions(context);
+    console.log("body.rest:" + JSON.stringify(options));
     request.get(options, function (error, response, body) {
       if (!error && response.statusCode == 200){
         if('error' in body){
@@ -84,7 +85,7 @@ module.exports = class HandlePizzaOrder {
     var query = {
       "keyid":process.env.GNAVI_ACCESS_KEY,
       "format":"json",
-//      "address":context.confirmed.address,
+      "address":context.confirmed.address,
       "hit_per_page":1,
       "category_l":"RSFST08000",  // 大業態コード(ラーメン)
       "freeword":context.confirmed.genre,
