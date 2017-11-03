@@ -32,13 +32,15 @@ module.exports = class HandlePizzaOrder {
   // パラメーターが全部揃ったら実行する処理を記述します。
   finish(bot, event, context, resolve, reject){
     this.gnaviSearch(context, function(result){
+      var location = {};
+      location['title'] = result['name'];
+      location['address'] = result['address'];
+      location['latitude'] = Number(result['latitude']);
+      location['longitude'] = Number(result['longitude']);
+      
       let message = {
-          location:{
-            title:result['name'],
-            address:result['address'],
-            latitude: Number(result['latitude']),
-            longitude: Number(result['longitude'])
-          }
+          text:`こちらはいかがですか？\n【お店】${result['name']}\n【営業時間】${result['opentime']}`,
+          location:location
       };
       return bot.reply(message).then(
         (response) => {
