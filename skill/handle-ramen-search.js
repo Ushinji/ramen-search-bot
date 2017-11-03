@@ -32,11 +32,12 @@ module.exports = class HandlePizzaOrder {
   // パラメーターが全部揃ったら実行する処理を記述します。
   finish(bot, event, context, resolve, reject){
     this.gnaviSearch(context, function(result){
-/*
       let message = {
-          text:`こちらはいかがですか？\n【お店】${result['name']}\n【営業時間】${result['opentime']}`,
+        text:result['url'],
+        text:`こちらはいかがですか？`
       };
-*/
+/*
+      // 位置情報-MSG
       let message = {
         "type":"location",
         "title":result['name'],
@@ -44,7 +45,7 @@ module.exports = class HandlePizzaOrder {
         "latitude": Number(result['latitude']),
         "longitude": Number(result['longitude'])
       };
-
+*/
       return bot.reply(message).then(
         (response) => {
             return resolve();
@@ -83,6 +84,10 @@ module.exports = class HandlePizzaOrder {
         // 営業時間
         if('opentime' in body.rest){
             result['opentime'] = body.rest.opentime;
+        }
+        // URL
+        if('url' in body.rest){
+            result['url'] = body.rest.url;
         }
       } else {
           console.log('error: '+ response.statusCode);
