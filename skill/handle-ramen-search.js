@@ -14,7 +14,7 @@ module.exports = class HandlePizzaOrder {
             text: "お好みのジャンルはありますか？",
             actions: [
                 {type:"postback",label:"あっさり",data:"あっさり"},
-                {type:"postback",label:"あっさり",data:"あっさり"},
+                {type:"postback",label:"こってり",data:"こってり"},
                 {type:"postback",label:"ラーメン二郎",data:"ラーメン二郎"}
             ]
           }
@@ -52,7 +52,7 @@ module.exports = class HandlePizzaOrder {
             console.log("検索エラー" + JSON.stringify(body));
             return;
         }
-        console.log("body.rest:\n" + body.rest.name);
+        console.log("body.rest:" + JSON.stringify(body));
         // 店名
         if('name' in body.rest){
             result['name'] = body.rest.name;
@@ -84,7 +84,7 @@ module.exports = class HandlePizzaOrder {
     var query = {
       "keyid":process.env.GNAVI_ACCESS_KEY,
       "format":"json",
-      "address":context.confirmed.address,
+//      "address":context.confirmed.address,
       "hit_per_page":1,
       "category_l":"RSFST08000",  // 大業態コード(ラーメン)
       "freeword":context.confirmed.genre,
