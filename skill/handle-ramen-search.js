@@ -97,6 +97,7 @@ module.exports = class HandlePizzaOrder {
         qs: query,
         json: true
     };
+    console.log(options);
     return options;
   }
 };
