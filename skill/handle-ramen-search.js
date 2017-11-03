@@ -43,7 +43,8 @@ module.exports = class HandlePizzaOrder {
         "address":result['address'],
         "latitude": Number(result['latitude']),
         "longitude": Number(result['longitude'])
-      }
+      };
+
       return bot.reply(message).then(
         (response) => {
             return resolve();
