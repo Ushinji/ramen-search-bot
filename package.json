@@ -1,0 +1,15 @@
+{
+  "name": "ramen-search-bot",
+  "version": "1.0.0",
+  "description": "LINE chatbot of searching desire ramen restaurant on guru-navi",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ushinji",
+  "license": "MIT",
+  "dependencies": {
+    "bot-express": "0.0.132",
+    "express": "^4.16.2"
+  }
+}
