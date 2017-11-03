@@ -1,4 +1,5 @@
 'use strict';
+var request = require('request');
 
 module.exports = class HandlePizzaOrder {
   // コンストラクター。このスキルで必要とする、または指定することができるパラメータを設定します。
@@ -30,7 +31,6 @@ module.exports = class HandlePizzaOrder {
 
   // パラメーターが全部揃ったら実行する処理を記述します。
   finish(bot, event, context, resolve, reject){
-    console.log("context:" + context.confirmed.address + "," + context.confirmed.genre);
     this.gnaviSearch(context, function(result){
       let message = {
           text:`こちらはいかがですか？\n【お店】${result['name']}\n【営業時間】${result['opentime']}`
@@ -46,7 +46,6 @@ module.exports = class HandlePizzaOrder {
   gnaviSearch(context, callback){
     var result = {};
     var options = this.createGnaviOptions(context);
-    console.log("options:" + options);
     request.get(options, function (error, response, body) {
       if (!error && response.statusCode == 200){
         if('error' in body){
@@ -97,7 +96,6 @@ module.exports = class HandlePizzaOrder {
         qs: query,
         json: true
     };
-    console.log(options);
     return options;
   }
 };
