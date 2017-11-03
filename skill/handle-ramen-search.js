@@ -32,10 +32,12 @@ module.exports = class HandlePizzaOrder {
   // パラメーターが全部揃ったら実行する処理を記述します。
   finish(bot, event, context, resolve, reject){
     this.gnaviSearch(context, function(result){
+
       let message = {
-        text:result['url'],
-        text:`こちらはいかがですか？`
-      };
+        "type":"text",
+        "text":result['url']
+      };      
+      console.log(message);
 /*
       // 位置情報-MSG
       let message = {
