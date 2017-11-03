@@ -33,7 +33,12 @@ module.exports = class HandlePizzaOrder {
   finish(bot, event, context, resolve, reject){
     this.gnaviSearch(context, function(result){
       let message = {
-          text:`こちらはいかがですか？\n【お店】${result['name']}\n【営業時間】${result['opentime']}`
+          location:{
+            title:result['name'],
+            address:result['address'],
+            latitude: Number(result['latitude']),
+            longitude: Number(result['longitude'])
+          }
       };
       return bot.reply(message).then(
         (response) => {
