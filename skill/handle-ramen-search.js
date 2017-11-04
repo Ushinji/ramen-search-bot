@@ -34,7 +34,7 @@ module.exports = class HandlePizzaOrder {
     this.gnaviSearch(context, function(result){
       let message = {
         "type":"text",
-        "text":"こちらはいかがですか？\n【お店】" + ${result['name']} + "\n" + ${result['url']}
+        "text":'こちらはいかがですか？\n【お店】' + ${result['name']} + '\n' + ${result['url']}
       };
       console.log(message);
 /*
