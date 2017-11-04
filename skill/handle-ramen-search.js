@@ -31,10 +31,11 @@ module.exports = class HandlePizzaOrder {
 
   // パラメーターが全部揃ったら実行する処理を記述します。
   finish(bot, event, context, resolve, reject){
+    console.log("context:" + JSON.stringify(context));
     this.gnaviSearch(context, function(result){
       let message = {
         "type":"text",
-        "text":"こちらはいかがですか？\n【お店】 " + result['name'] + "\n【お店】 " + result['url'],
+        "text":"こちらはいかがですか？\n【お店】 " + result['name'] + "\n【URL】 " + result['url'],
       };
       return bot.reply(message).then(
         (response) => {
