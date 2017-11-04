@@ -13,9 +13,9 @@ module.exports = class HandlePizzaOrder {
             type: "buttons",
             text: "お好みのジャンルはありますか？",
             actions: [
-                {type:"postback",label:"あっさり",data:"あっさり"},
-                {type:"postback",label:"こってり",data:"こってり"},
-                {type:"postback",label:"ラーメン二郎",data:"ラーメン二郎"}
+                {type:"postback",label:"あっさり",text:"あっさり"},
+                {type:"postback",label:"こってり",text:"こってり"},
+                {type:"postback",label:"ラーメン二郎",text:"ラーメン二郎"}
             ]
           }
         }
