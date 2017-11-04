@@ -35,8 +35,8 @@ module.exports = class HandlePizzaOrder {
 
       let message = {
         "type":"text",
-        "text":result['url']
-      };      
+        "text":'こちらはいかがですか？\n【お店】${result['name']}\n${result['url']}'
+      };
       console.log(message);
 /*
       // 位置情報-MSG
