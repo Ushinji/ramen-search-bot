@@ -34,19 +34,8 @@ module.exports = class HandlePizzaOrder {
     this.gnaviSearch(context, function(result){
       let message = {
         "type":"text",
-        "text":'こちらはいかがですか？\n【お店】' + ${result['name']} + '\n' + ${result['url']}
+        "text":"こちらはいかがですか？\n【お店】 " + result['name'] + "\n【お店】 " + result['url'],
       };
-      console.log(message);
-/*
-      // 位置情報-MSG
-      let message = {
-        "type":"location",
-        "title":result['name'],
-        "address":result['address'],
-        "latitude": Number(result['latitude']),
-        "longitude": Number(result['longitude'])
-      };
-*/
       return bot.reply(message).then(
         (response) => {
             return resolve();
