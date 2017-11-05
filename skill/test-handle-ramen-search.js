@@ -17,7 +17,7 @@ function createGnaviOptions(context) {
   };
   return options;
 }
-
+// entityの形式変換（"{ data: 'entity-data' }"→"='entity-data'"）
 function convertEntityData(entity){
   if( !isString(entity) && 'data' in entity ){
       return entity.data;
@@ -25,6 +25,7 @@ function convertEntityData(entity){
   return entity;
 }
 
+// 指定オブジェクトが文字列型か判定するメソッド
 function isString(obj) {
   return Object.prototype.toString.call(obj) === '[object String]';
 }

@@ -95,7 +95,7 @@ module.exports = class HandlePizzaOrder {
       "address":context.confirmed.address,
       "hit_per_page":1,
       "category_l":"RSFST08000",  // 大業態コード(ラーメン)
-      "freeword":convertEntityData(context.confirmed.genre),
+      "freeword":this.convertEntityData(context.confirmed.genre),
       "freeword_condition":1
     };
     var options = {
@@ -109,7 +109,7 @@ module.exports = class HandlePizzaOrder {
 
   // entityの形式変換（"{ data: 'entity-data' }"→"='entity-data'"）
   convertEntityData(entity){
-    if( !isString(entity) && 'data' in entity ){
+    if( !this.isString(entity) && 'data' in entity ){
         return entity.data;
     }
     return entity;
