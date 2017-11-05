@@ -19,9 +19,18 @@ module.exports = class HandlePizzaOrder {
             ]
           }
         },
-        reaction: (bot, event, context, resolve, reject) => {
-          var value = this.convertEntityData(context.confirmed.genre);
-          bot.queue({text: `${value}ですね。`});
+        reaction: (error, value, bot, event, context, resolve, reject) => {
+          if (!error){
+              bot.queue({
+                  type: "text",
+                  text: `${value}ですね。ありがとうございます。`
+              });
+          } else {
+              bot.change_message_to_confirm("genre", {
+                  type: "text",
+                  text: "恐れ入りますが、正しく理解できませんでした。"
+              });
+          }
           return resolve();
         }
       },
