@@ -18,12 +18,17 @@ module.exports = class HandlePizzaOrder {
                 {type:"postback",label:"ラーメン二郎",data:"ラーメン二郎"}
             ]
           }
+        },
+        reaction: (bot, event, context, resolve, reject) => {
+          var value = this.convertEntityData(context.confirmed.genre);
+          bot.queue({text: `${value}ですね。`});
+          return resolve();
         }
       },
       address: {
         message_to_confirm: {
             type: "text",
-            text: "場所の希望を教えてください。"
+            text: "次に、場所の希望を教えてください。"
         }
       }
     };
