@@ -29,7 +29,7 @@ module.exports = class HandlePizzaOrder {
     };
   }
 
-  // パラメーターが全部揃ったら実行する処理を記述します。
+  // パラメーターが全部揃ったら実行する処理
   finish(bot, event, context, resolve, reject){
     console.log("context.rest:" + JSON.stringify(context));
     this.gnaviSearch(context, function(result){
@@ -45,6 +45,7 @@ module.exports = class HandlePizzaOrder {
     });
   }
 
+　// ぐるなびAPIに検索条件を送信し、検索結果を取得
   gnaviSearch(context, callback){
     var result = {};
     var options = this.createGnaviOptions(context);
@@ -86,7 +87,7 @@ module.exports = class HandlePizzaOrder {
       callback(result);
     });
   }
-
+  // ぐるなびAPIへ送信する際のオプションを作成
   createGnaviOptions(context) {
     var query = {
       "keyid":process.env.GNAVI_ACCESS_KEY,
@@ -94,7 +95,7 @@ module.exports = class HandlePizzaOrder {
       "address":context.confirmed.address,
       "hit_per_page":1,
       "category_l":"RSFST08000",  // 大業態コード(ラーメン)
-      "freeword":context.confirmed.genre.data,
+      "freeword":convertEntityData(context.confirmed.genre),
       "freeword_condition":1
     };
     var options = {
@@ -104,5 +105,18 @@ module.exports = class HandlePizzaOrder {
         json: true
     };
     return options;
+  }
+
+  // entityの形式変換（"{ data: 'entity-data' }"→"='entity-data'"）
+  convertEntityData(entity){
+    if( !isString(entity) && 'data' in entity ){
+        return entity.data;
+    }
+    return entity;
+  }
+
+  // 指定オブジェクトが文字列型か判定するメソッド
+  isString(obj) {
+    return Object.prototype.toString.call(obj) === '[object String]';
   }
 };
