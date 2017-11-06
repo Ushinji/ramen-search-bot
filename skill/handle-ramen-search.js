@@ -20,9 +20,9 @@ module.exports = class HandlePizzaOrder {
           }
         },
         reaction: (error, value, bot, event, context, resolve, reject) => {
-          if (error){
-            return resolve();
-          }
+            if (error){
+                return resolve();
+            }
           var genre = this.convertEntityData(value);
           bot.queue({text: `${genre}ですね。OKです。`});
           return resolve();
@@ -40,10 +40,10 @@ module.exports = class HandlePizzaOrder {
               is_name_correct: {
                 message_to_confirm: {
                   type: "template",
-                  altText: `確認ですが、${value}でよろしいですか？`,
+                  altText: `確認です！${value}でよろしいですか？`,
                   template: {
                     type: "confirm",
-                    text: `確認ですが、${value}でよろしいですか？`,
+                    text: `確認です！${value}でよろしいですか？`,
                     actions: [
                       {type: "message", label: "はい", text: "はい"},
                       {type: "message", label: "いいえ", text: "いいえ"}
@@ -60,9 +60,9 @@ module.exports = class HandlePizzaOrder {
                 reaction: (error, value, bot, event, context, resolve, reject) => {
                     if (error) return resolve();
                     if (value == "はい"){
-                      bot.queue({text: `分かりました。以上で調べてみます。`});
+                      bot.queue({text: `分かりました。ご希望のラーメン店を探してみます！`});
                     } else {
-                      bot.queue({text: "お手数ですが、もう一度入力お願いします。"});
+                      bot.queue({text: "分かりました。お手数ですが、もう一度入力お願いします。"});
                       bot.collect("address");
                     }
                     return resolve();
@@ -70,7 +70,7 @@ module.exports = class HandlePizzaOrder {
               }
             });
           } else {
-              bot.queue({text: `申し訳ありません。うまく理解できなかったので、もう一度入力してください。`});
+              bot.queue({text: `申し訳ありません。よく分からなかったので、もう一度入力してください。`});
               bot.collect("address");
           }
           return resolve();
@@ -78,18 +78,23 @@ module.exports = class HandlePizzaOrder {
       },
     };
   }
-
   // パラメーターが全部揃ったら実行する処理
   finish(bot, event, context, resolve, reject){
     console.log("context.rest:" + JSON.stringify(context));
-    this.gnaviSearch(context, function(result){
+    var gnaviBody = {};
+    this.gnaviSearch(context, function(gnaviBody){
+      var columus = this.createCarouselColums(gnaviBody);
       let message = {
-          "type":"text",
-          "text":"こちらはいかがですか？\n【お店】" + result['name'] + "\n【URL】 " + result['url'],
+        "type":"template",
+        "altText": "this is a carousel template",
+        "template": {
+          "type": "carousel",
+          "columns": columns
+        }
       };
       return bot.reply(message).then(
         (response) => {
-            return resolve();
+          return resolve();
         }
       );
     });
@@ -97,43 +102,19 @@ module.exports = class HandlePizzaOrder {
 
 　// ぐるなびAPIに検索条件を送信し、検索結果を取得
   gnaviSearch(context, callback){
-    var result = {};
     var options = this.createGnaviOptions(context);
     console.log("body.rest:" + JSON.stringify(options));
     request.get(options, function (error, response, body) {
+      var result = {};
       if (!error && response.statusCode == 200){
         if('error' in body){
-          console.log("検索エラー" + JSON.stringify(body));
+          console.log("検索エラー");
         }
         console.log("body.rest:" + JSON.stringify(body));
-        // 店名
-        if('name' in body.rest){
-            result['name'] = body.rest.name;
-        }
-        // 住所
-        if('address' in body.rest){
-            result['address'] = body.rest.address;
-        }
-        // 緯度
-        if('latitude' in body.rest){
-            result['latitude'] = body.rest.latitude;
-        }
-        // 軽度
-        if('longitude' in body.rest){
-            result['longitude'] = body.rest.longitude;
-        }
-        // 営業時間
-        if('opentime' in body.rest){
-            result['opentime'] = body.rest.opentime;
-        }
-        // URL
-        if('url' in body.rest){
-            result['url'] = body.rest.url;
-        }
       } else {
-          console.log('error: '+ response.statusCode);
+        console.log('error: '+ response.statusCode);
       }
-      callback(result);
+      callback(body);
     });
   }
   // ぐるなびAPIへ送信する際のオプションを作成
@@ -142,16 +123,16 @@ module.exports = class HandlePizzaOrder {
       "keyid":process.env.GNAVI_ACCESS_KEY,
       "format":"json",
       "address":context.confirmed.address,
-      "hit_per_page":1,
+      "hit_per_page":3,
       "category_l":"RSFST08000",  // 大業態コード(ラーメン)
       "freeword":this.convertEntityData(context.confirmed.genre),
       "freeword_condition":1
     };
     var options = {
-        url: 'https://api.gnavi.co.jp/RestSearchAPI/20150630/',
-        headers : {'Content-Type' : 'application/json; charset=UTF-8'},
-        qs: query,
-        json: true
+      url: 'https://api.gnavi.co.jp/RestSearchAPI/20150630/',
+      headers : {'Content-Type' : 'application/json; charset=UTF-8'},
+      qs: query,
+      json: true
     };
     return options;
   }
@@ -159,7 +140,7 @@ module.exports = class HandlePizzaOrder {
   // entityの形式変換（"{ data: 'entity-data' }"→"='entity-data'"）
   convertEntityData(entity){
     if( !this.isString(entity) && 'data' in entity ){
-        return entity.data;
+      return entity.data;
     }
     return entity;
   }
@@ -167,5 +148,27 @@ module.exports = class HandlePizzaOrder {
   // 指定オブジェクトが文字列型か判定するメソッド
   isString(obj) {
     return Object.prototype.toString.call(obj) === '[object String]';
+  }
+
+  createCarouselColums(body){
+    //コールバックで色々な処理
+    var columns = [];
+    for (var rest of body.items) {
+      columns.push({
+        "thumbnailImageUrl": rest.image_url.shop_image1,
+        "title": rest.name,
+        "text": rest.pr.pr_short ? rest.pr.pr_short.substr(0, 60) : ' ', // title指定時は60文字以内,
+        "actions": [{
+          "type": "uri",
+          "label": "紹介ページへ移動",
+          "uri": rest.url
+        }]
+      });
+      // carouselは最大5つのため、6つ以降はカット。
+      if (columns.length === 5) {
+        break;
+      }
+    }
+    return colums;
   }
 };
