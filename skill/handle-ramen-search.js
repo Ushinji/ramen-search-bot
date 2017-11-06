@@ -24,14 +24,14 @@ module.exports = class HandlePizzaOrder {
                 return resolve();
             }
           var genre = this.convertEntityData(value);
-          bot.queue({text: `${genre}ですね。OKです。`});
+          bot.queue({text: `「${genre}」ですね。OKです。`});
           return resolve();
         }
       },
       address: {
         message_to_confirm: {
             type: "text",
-            text: "場所の希望を教えてください(例:渋谷)"
+            text: "場所の希望を教えてください"
         },
         reaction: (error, value, bot, event, context, resolve, reject) => {
           if(value){
@@ -40,10 +40,10 @@ module.exports = class HandlePizzaOrder {
               is_name_correct: {
                 message_to_confirm: {
                   type: "template",
-                  altText: `確認です！${value}でよろしいですか？`,
+                  altText: `「${value}」でよろしいですか？`,
                   template: {
                     type: "confirm",
-                    text: `確認です！${value}でよろしいですか？`,
+                    text: `「${value}」でよろしいですか？`,
                     actions: [
                       {type: "message", label: "はい", text: "はい"},
                       {type: "message", label: "いいえ", text: "いいえ"}
@@ -78,21 +78,14 @@ module.exports = class HandlePizzaOrder {
       },
     };
   }
-  
+
   // パラメーターが全部揃ったら実行する処理
   finish(bot, event, context, resolve, reject){
     console.log("context.rest:" + JSON.stringify(context));
     var gnaviBody = {};
     this.gnaviSearch(context, function(gnaviBody){
-      var columns = this.createCarouselColums(gnaviBody);
-      let message = {
-        "type":"template",
-        "altText": "this is a carousel template",
-        "template": {
-          "type": "carousel",
-          "columns": columns
-        }
-      };
+      let message = this.createCarouselMessage(gnaviBody);
+      console.log("ReplyMsg:" + JSON.stringify(message));
       return bot.reply(message).then(
         (response) => {
           return resolve();
@@ -152,8 +145,7 @@ module.exports = class HandlePizzaOrder {
     return Object.prototype.toString.call(obj) === '[object String]';
   }
 
-  createCarouselColums(body){
-    //コールバックで色々な処理
+  createCarouselMessage(body){
     var columns = [];
     for (var rest of body.items) {
       columns.push({
@@ -169,6 +161,15 @@ module.exports = class HandlePizzaOrder {
       // carouselは最大5つのため、6つ以降はカット。
       if (columns.length === 5) break;
     }
-    return columns;
+    // carouselのメッセージ作成
+    var message = {
+      "type":"template",
+      "altText": "this is a carousel template",
+      "template": {
+        "type": "carousel",
+        "columns": columns
+      }
+    };
+    return message;
   }
 };
