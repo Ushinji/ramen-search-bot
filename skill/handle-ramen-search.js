@@ -31,13 +31,48 @@ module.exports = class HandlePizzaOrder {
       address: {
         message_to_confirm: {
             type: "text",
-            text: "場所の希望を教えてください。"
+            text: "場所の希望を教えてください(例:渋谷)"
         },
         reaction: (error, value, bot, event, context, resolve, reject) => {
-          if (error){
-            return resolve();
+          if(value){
+            // We got Lastname & Firstname so going to check with user if this is correct.
+            bot.collect({
+              is_name_correct: {
+                message_to_confirm: {
+                  type: "template",
+                  altText: `確認ですが、${value} ${value.firstname}でよかったでしょうか？`,
+                  template: {
+                    type: "confirm",
+                    text: `確認ですが、${value} ${value.firstname}でよかったでしょうか？`,
+                    actions: [
+                      {type: "message", label: "はい", text: "はい"},
+                      {type: "message", label: "いいえ", text: "いいえ"}
+                    ]
+                  }
+                },
+                parser: (value, bot, event, context, resolve, reject) => {
+                  const acceptable_values = ["はい", "いいえ"];
+                  if (acceptable_values.indexOf(value) >= 0){
+                    return resolve(value);
+                  }
+                  return reject();
+                },
+                reaction: (error, value, bot, event, context, resolve, reject) => {
+                    if (error) return resolve();
+                    if (value == "はい"){
+                      bot.queue({text: `${value}ですね。以上で調べてみます。`});
+                    } else {
+                      bot.queue({text: "分かりました。お手数ですが、もう一度希望の場所を入力してください。"});
+                      bot.collect("address");
+                    }
+                    return resolve();
+                  }
+                }
+            });
+          } else {
+              bot.queue({text: `申し訳ありませんが、入力内容が分からなかったので、もう一度希望の場所を入力してください。`});
+              bot.collect("address");
           }
-          bot.queue({text: `${value}ですね。以上で調べてみます。`});
           return resolve();
         }
       },
