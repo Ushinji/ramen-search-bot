@@ -18,20 +18,6 @@ module.exports = class HandlePizzaOrder {
                 {type:"postback",label:"ラーメン二郎",data:"ラーメン二郎"}
             ]
           }
-        },
-        reaction: (error, value, bot, event, context, resolve, reject) => {
-          if (!error){
-              bot.queue({
-                  type: "text",
-                  text: `${value}ですね。ありがとうございます。`
-              });
-          } else {
-              bot.change_message_to_confirm("genre", {
-                  type: "text",
-                  text: "恐れ入りますが、正しく理解できませんでした。"
-              });
-          }
-          return resolve();
         }
       },
       address: {
@@ -46,11 +32,19 @@ module.exports = class HandlePizzaOrder {
   // パラメーターが全部揃ったら実行する処理
   finish(bot, event, context, resolve, reject){
     console.log("context.rest:" + JSON.stringify(context));
-    this.gnaviSearch(context, function(result){
-      let message = {
-        "type":"text",
-        "text":"こちらはいかがですか？\n【お店】 " + result['name'] + "\n【URL】 " + result['url'],
-      };
+    this.gnaviSearch(context, function(error, result){
+      let message = {};
+      if (error){
+        message = {
+          "type":"text",
+          "text":"申し訳ございません。" + error.error.message;
+        };
+      } else {
+        message = {
+          "type":"text",
+          "text":"こちらはいかがですか？\n【お店】 " + result['name'] + "\n【URL】 " + result['url'],
+        };
+      }
       return bot.reply(message).then(
         (response) => {
             return resolve();
@@ -68,7 +62,7 @@ module.exports = class HandlePizzaOrder {
       if (!error && response.statusCode == 200){
         if('error' in body){
             console.log("検索エラー" + JSON.stringify(body));
-            return;
+            callback(body, result);
         }
         console.log("body.rest:" + JSON.stringify(body));
         // 店名
@@ -98,7 +92,7 @@ module.exports = class HandlePizzaOrder {
       } else {
           console.log('error: '+ response.statusCode);
       }
-      callback(result);
+      callback(null, result);
     });
   }
   // ぐるなびAPIへ送信する際のオプションを作成
