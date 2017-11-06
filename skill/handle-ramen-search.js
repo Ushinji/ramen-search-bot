@@ -37,7 +37,7 @@ module.exports = class HandlePizzaOrder {
       if (error){
         message = {
           "type":"text",
-          "text":"申し訳ございません。" + error.error.message;
+          "text":"申し訳ございません。ご希望に合うお店が見つかりませんでした。";
         };
       } else {
         message = {
