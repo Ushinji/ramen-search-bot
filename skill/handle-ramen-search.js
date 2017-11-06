@@ -33,18 +33,10 @@ module.exports = class HandlePizzaOrder {
   finish(bot, event, context, resolve, reject){
     console.log("context.rest:" + JSON.stringify(context));
     this.gnaviSearch(context, function(error, result){
-      let message = {};
-      if (error){
-        message = {
-          "type":"text",
-          "text":"申し訳ございません。ご希望に合うお店が見つかりませんでした。";
-        };
-      } else {
-        message = {
+      let message = {
           "type":"text",
           "text":"こちらはいかがですか？\n【お店】 " + result['name'] + "\n【URL】 " + result['url'],
-        };
-      }
+      };
       return bot.reply(message).then(
         (response) => {
             return resolve();
@@ -61,8 +53,7 @@ module.exports = class HandlePizzaOrder {
     request.get(options, function (error, response, body) {
       if (!error && response.statusCode == 200){
         if('error' in body){
-            console.log("検索エラー" + JSON.stringify(body));
-            callback(body, result);
+          console.log("検索エラー" + JSON.stringify(body));
         }
         console.log("body.rest:" + JSON.stringify(body));
         // 店名
@@ -92,7 +83,7 @@ module.exports = class HandlePizzaOrder {
       } else {
           console.log('error: '+ response.statusCode);
       }
-      callback(null, result);
+      callback(result);
     });
   }
   // ぐるなびAPIへ送信する際のオプションを作成
