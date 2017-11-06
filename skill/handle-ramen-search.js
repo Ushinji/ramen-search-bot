@@ -40,10 +40,10 @@ module.exports = class HandlePizzaOrder {
               is_name_correct: {
                 message_to_confirm: {
                   type: "template",
-                  altText: `確認ですが、${value} ${value.firstname}でよかったでしょうか？`,
+                  altText: `確認ですが、${value}でよろしいですか？`,
                   template: {
                     type: "confirm",
-                    text: `確認ですが、${value} ${value.firstname}でよかったでしょうか？`,
+                    text: `確認ですが、${value}でよろしいですか？`,
                     actions: [
                       {type: "message", label: "はい", text: "はい"},
                       {type: "message", label: "いいえ", text: "いいえ"}
@@ -60,17 +60,17 @@ module.exports = class HandlePizzaOrder {
                 reaction: (error, value, bot, event, context, resolve, reject) => {
                     if (error) return resolve();
                     if (value == "はい"){
-                      bot.queue({text: `${value}ですね。以上で調べてみます。`});
+                      bot.queue({text: `分かりました。以上で調べてみます。`});
                     } else {
-                      bot.queue({text: "分かりました。お手数ですが、もう一度希望の場所を入力してください。"});
+                      bot.queue({text: "お手数ですが、もう一度入力お願いします。"});
                       bot.collect("address");
                     }
                     return resolve();
-                  }
                 }
+              }
             });
           } else {
-              bot.queue({text: `申し訳ありませんが、入力内容が分からなかったので、もう一度希望の場所を入力してください。`});
+              bot.queue({text: `申し訳ありません。うまく理解できなかったので、もう一度入力してください。`});
               bot.collect("address");
           }
           return resolve();
