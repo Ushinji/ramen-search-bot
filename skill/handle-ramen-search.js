@@ -84,7 +84,7 @@ module.exports = class HandlePizzaOrder {
     console.log("context.rest:" + JSON.stringify(context));
     var gnaviBody = {};
     this.gnaviSearch(context, function(gnaviBody){
-      let message = this.createCarouselMessage(gnaviBody);
+      let message = createCarouselMessage(gnaviBody);
       console.log("ReplyMsg:" + JSON.stringify(message));
       return bot.reply(message).then(
         (response) => {
