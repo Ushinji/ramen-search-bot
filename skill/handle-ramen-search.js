@@ -84,13 +84,15 @@ module.exports = class HandlePizzaOrder {
     console.log("context.rest:" + JSON.stringify(context));
     var gnaviBody = {};
     this.gnaviSearch(context, function(gnaviBody){
-      let message = createCarouselMessage(gnaviBody);
-      console.log("ReplyMsg:" + JSON.stringify(message));
-      return bot.reply(message).then(
-        (response) => {
-          return resolve();
-        }
-      );
+      let message = {};
+      createCarouselMessage(gnaviBody, function(message){
+        console.log("ReplyMsg:" + JSON.stringify(message));
+        return bot.reply(message).then(
+          (response) => {
+            return resolve();
+          }
+        );
+      });
     });
   }
 
@@ -145,7 +147,7 @@ module.exports = class HandlePizzaOrder {
     return Object.prototype.toString.call(obj) === '[object String]';
   }
 
-  createCarouselMessage(body){
+  createCarouselMessage(body, callback){
     var columns = [];
     for (var rest of body.items) {
       columns.push({
@@ -170,6 +172,6 @@ module.exports = class HandlePizzaOrder {
         "columns": columns
       }
     };
-    return message;
+    callback(message);
   }
 };
