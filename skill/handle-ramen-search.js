@@ -23,7 +23,8 @@ module.exports = class HandlePizzaOrder {
           if (error){
             return resolve();
           }
-          bot.queue({text: `${value}ですね。OKです。`});
+          var genre = convertEntityData(value);
+          bot.queue({text: `${genre}ですね。OKです。`});
           return resolve();
         }
       },
@@ -31,15 +32,15 @@ module.exports = class HandlePizzaOrder {
         message_to_confirm: {
             type: "text",
             text: "場所の希望を教えてください。"
-        }
-      },
-      reaction: (error, value, bot, event, context, resolve, reject) => {
-        if (error){
+        },
+        reaction: (error, value, bot, event, context, resolve, reject) => {
+          if (error){
+            return resolve();
+          }
+          bot.queue({text: `${value}ですね。以上で調べてみます。`});
           return resolve();
         }
-        bot.queue({text: `${value}ですね。以上で調べてみます。`});
-        return resolve();
-      }
+      },
     };
   }
 
