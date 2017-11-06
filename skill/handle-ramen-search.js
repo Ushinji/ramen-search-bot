@@ -78,12 +78,13 @@ module.exports = class HandlePizzaOrder {
       },
     };
   }
+  
   // パラメーターが全部揃ったら実行する処理
   finish(bot, event, context, resolve, reject){
     console.log("context.rest:" + JSON.stringify(context));
     var gnaviBody = {};
     this.gnaviSearch(context, function(gnaviBody){
-      var columus = this.createCarouselColums(gnaviBody);
+      var columns = this.createCarouselColums(gnaviBody);
       let message = {
         "type":"template",
         "altText": "this is a carousel template",
@@ -117,6 +118,7 @@ module.exports = class HandlePizzaOrder {
       callback(body);
     });
   }
+
   // ぐるなびAPIへ送信する際のオプションを作成
   createGnaviOptions(context) {
     var query = {
@@ -165,10 +167,8 @@ module.exports = class HandlePizzaOrder {
         }]
       });
       // carouselは最大5つのため、6つ以降はカット。
-      if (columns.length === 5) {
-        break;
-      }
+      if (columns.length === 5) break;
     }
-    return colums;
+    return columns;
   }
 };
