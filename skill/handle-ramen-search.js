@@ -23,7 +23,7 @@ module.exports = class HandlePizzaOrder {
           if (error){
             return resolve();
           }
-          var genre = convertEntityData(value);
+          var genre = this.convertEntityData(value);
           bot.queue({text: `${genre}ですね。OKです。`});
           return resolve();
         }
