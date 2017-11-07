@@ -85,6 +85,10 @@ module.exports = class HandlePizzaOrder {
     var gnaviBody = {};
     this.gnaviSearch(context, function(gnaviBody){
       // カルーセル型メッセージ作成
+      for (var rest of gnaviBody.rest) {
+        console.log(`pr.pr_short:${Object.prototype.toString.call(rest.pr.pr_short)}`);
+      }
+      
       var columns = [];
       for (var rest of gnaviBody.rest) {
         columns.push({
