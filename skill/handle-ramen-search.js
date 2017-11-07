@@ -167,7 +167,7 @@ module.exports = class HandlePizzaOrder {
   }
 
   // 指定オブジェクトが文字列型か判定するメソッド
-  isString(obj) {
+  function isString(obj) {
     return Object.prototype.toString.call(obj) === '[object String]';
   }
 
