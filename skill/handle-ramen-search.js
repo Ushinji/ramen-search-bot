@@ -82,8 +82,8 @@ module.exports = class HandlePizzaOrder {
   // パラメーターが全部揃ったら実行する処理
   finish(bot, event, context, resolve, reject){
     console.log("context.rest:" + JSON.stringify(context));
-    var gnaviBody = {};
-    this.gnaviSearch(context, function(gnaviBody){
+    var gnavi_body = {};
+    this.gnaviSearch(context, function(gnavi_body){
       // カルーセル型メッセージ作成
       var columns = [];
       for (var rest of gnavi_body.rest) {
