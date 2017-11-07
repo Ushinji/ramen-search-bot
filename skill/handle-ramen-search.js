@@ -84,15 +84,37 @@ module.exports = class HandlePizzaOrder {
     console.log("context.rest:" + JSON.stringify(context));
     var gnaviBody = {};
     this.gnaviSearch(context, function(gnaviBody){
-      let message = {};
-      createCarouselMessage(gnaviBody, function(message){
-        console.log("ReplyMsg:" + JSON.stringify(message));
-        return bot.reply(message).then(
-          (response) => {
-            return resolve();
-          }
-        );
-      });
+      // カルーセル型メッセージ作成
+      var columns = [];
+      for (var rest of body.items) {
+        columns.push({
+          "thumbnailImageUrl": rest.image_url.shop_image1,
+          "title": rest.name,
+          "text": rest.pr.pr_short ? rest.pr.pr_short.substr(0, 60) : ' ', // title指定時は60文字以内,
+          "actions": [{
+            "type": "uri",
+            "label": "紹介ページへ移動",
+            "uri": rest.url
+          }]
+        });
+        // carouselは最大5つのため、6つ以降はカット。
+        if (columns.length === 5) break;
+      }
+      // carouselのメッセージ作成
+      var message = {
+        "type":"template",
+        "altText": "this is a carousel template",
+        "template": {
+          "type": "carousel",
+          "columns": columns
+        }
+      };
+      // 最終的な応答を返す
+      return bot.reply(message).then(
+        (response) => {
+          return resolve();
+        }
+      );
     });
   }
 
@@ -147,6 +169,7 @@ module.exports = class HandlePizzaOrder {
     return Object.prototype.toString.call(obj) === '[object String]';
   }
 
+/*
   createCarouselMessage(body, callback){
     var columns = [];
     for (var rest of body.items) {
@@ -174,4 +197,5 @@ module.exports = class HandlePizzaOrder {
     };
     callback(message);
   }
+*/
 };
