@@ -92,7 +92,8 @@ module.exports = class HandlePizzaOrder {
           "thumbnailImageUrl": rest.image_url.shop_image1,
           "title": rest.name,
           // 空文字の場合を回避([object Object])。title上限が60文字。
-          "text": this.isString(rest.pr.pr_short) ? rest.pr.pr_short.substr(0, 60) : ' ',
+          "text": Object.prototype.toString.call(rest.pr.pr_short) === '[object String]'
+                      ? rest.pr.pr_short.substr(0, 60) : ' ',
           "actions": [{
             "type": "uri",
             "label": "紹介ページへ移動",
