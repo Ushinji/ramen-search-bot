@@ -84,16 +84,15 @@ module.exports = class HandlePizzaOrder {
     console.log("context.rest:" + JSON.stringify(context));
     var gnavi_body = {};
     this.gnaviSearch(context, function(gnavi_body){
-      console.log(this);
       // カルーセル型メッセージ作成
       var columns = [];
       for (var rest of gnavi_body.rest) {
+        console.log( typeof rest.pr.pr_short );
         columns.push({
           "thumbnailImageUrl": rest.image_url.shop_image1,
           "title": rest.name,
           // 空文字の場合を回避([object Object])。title上限が60文字。
-          "text": Object.prototype.toString.call(rest.pr.pr_short) === '[object String]'
-                      ? rest.pr.pr_short.substr(0, 60) : ' ',
+          "text": typeof rest.pr.pr_short == 'string' ? rest.pr.pr_short.substr(0, 60) : ' ',
           "actions": [{
             "type": "uri",
             "label": "紹介ページへ移動",
