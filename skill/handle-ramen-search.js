@@ -111,7 +111,7 @@ module.exports = class HandlePizzaOrder {
           "columns": columns
         }
       };
-      console.log(`reply-msg:${message}`);
+      console.log(`reply-msg:${JSON.stringify(message)}`);
       // 最終的な応答を返す
       return bot.reply(message).then(
         (response) => {
