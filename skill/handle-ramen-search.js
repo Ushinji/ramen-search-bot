@@ -89,9 +89,9 @@ module.exports = class HandlePizzaOrder {
       for (var rest of gnavi_body.rest) {
         console.log( typeof rest.pr.pr_short );
         columns.push({
-          "thumbnailImageUrl": rest.image_url.shop_image1,
+          "thumbnailImageUrl": typeof rest.image_url.shop_image1 == 'string' ? rest.image_url.shop_image1 : ' ',
           "title": rest.name,
-          // 空文字の場合を回避([object Object])。title上限が60文字。
+          // 空データを回避([object Object])。title上限が60文字。
           "text": typeof rest.pr.pr_short == 'string' ? rest.pr.pr_short.substr(0, 60) : ' ',
           "actions": [{
             "type": "uri",
