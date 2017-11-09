@@ -3,10 +3,11 @@
 /*
 ** Import Packages
 */
-let app = require("express")();
+let express = require("express");
+let app = express();
 let bot_express = require("bot-express");
 
-app.use(bot_express.static('public'));
+app.use(express.static('public'));
 
 /*
 ** Middleware Configuration
