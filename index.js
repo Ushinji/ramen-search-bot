@@ -6,6 +6,8 @@
 let app = require("express")();
 let bot_express = require("bot-express");
 
+app.use(express.static('public'));
+
 /*
 ** Middleware Configuration
 */

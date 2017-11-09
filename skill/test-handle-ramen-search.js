@@ -1,3 +1,4 @@
+/*
 function createGnaviOptions(context) {
   var query = {
     "keyid":process.env.GNAVI_ACCESS_KEY,
@@ -32,3 +33,4 @@ function isString(obj) {
 var context = require('./test.json');
 var options = createGnaviOptions(context);
 console.log(options);
+*/
