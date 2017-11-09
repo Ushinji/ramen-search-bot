@@ -1,4 +1,3 @@
-
 function createGnaviOptions(context) {
   var query = {
     "keyid":process.env.GNAVI_ACCESS_KEY,

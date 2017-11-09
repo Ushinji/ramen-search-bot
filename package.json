@@ -11,6 +11,10 @@
   "dependencies": {
     "bot-express": "0.0.132",
     "express": "^4.16.2",
-    "fs": "0.0.1-security"
+    "fs": "0.0.1-security",
+    "cloudinary": ""
+  },
+  "engines": {
+    "node": "0.6.x"
   }
 }
