@@ -86,7 +86,7 @@ module.exports = class HandlePizzaOrder {
     this.gnaviSearch(context, function(gnavi_body){
       // カルーセル型メッセージ作成
       var columns = [];
-      var url_no_image = __dirname + 'public/images/no_image.png';
+      var url_no_image = 'https://ramen-search-bot.herokuapp.com/public/images/no_image.png';
       console.log(url_no_image);
 
       for (var rest of gnavi_body.rest) {
