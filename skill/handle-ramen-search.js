@@ -90,6 +90,12 @@ module.exports = class HandlePizzaOrder {
       for (var rest of gnavi_body.rest) {
         console.log( `pr_short:${typeof rest.pr.pr_short}` );
         console.log( `url_img:${typeof rest.image_url.shop_image1}` );
+        if( rest.pr.pr_short )  console.log(`pr_short true`);
+        else                    console.log('pr_short false');
+
+        if( rest.image_url.shop_image1 )  console.log(`shop_image1 true`);
+        else                              console.log('shop_image1 false');
+
         columns.push({
           "thumbnailImageUrl": typeof rest.image_url.shop_image1 == 'string' ? rest.image_url.shop_image1 : url_no_image,
           "title": rest.name,
