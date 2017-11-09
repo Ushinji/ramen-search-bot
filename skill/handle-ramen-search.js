@@ -91,7 +91,7 @@ module.exports = class HandlePizzaOrder {
         console.log( `pr_short:${typeof rest.pr.pr_short}` );
         console.log( `url_img:${typeof rest.image_url.shop_image1}` );
         columns.push({
-          "thumbnailImageUrl":  ? rest.image_url.shop_image1 : url_no_image,
+          "thumbnailImageUrl": typeof rest.image_url.shop_image1 == 'string' ? rest.image_url.shop_image1 : url_no_image,
           "title": rest.name,
           // 空データを回避([object Object])。title上限が60文字。
           "text": typeof rest.pr.pr_short == 'string' ? rest.pr.pr_short.substr(0, 60) : '',
