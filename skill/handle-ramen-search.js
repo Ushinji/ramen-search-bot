@@ -60,7 +60,7 @@ module.exports = class HandlePizzaOrder {
                 reaction: (error, value, bot, event, context, resolve, reject) => {
                     if (error) return resolve();
                     if (value == "はい"){
-                      bot.queue({text: `分かりました。ご希望のラーメン店を探してみます！`});
+                      bot.queue({text: `こちらのラーメン屋さんはいかがですか？`});
                     } else {
                       bot.queue({text: "分かりました。お手数ですが、もう一度入力お願いします。"});
                       bot.collect("address");
@@ -91,7 +91,7 @@ module.exports = class HandlePizzaOrder {
 
       // 結果が一件のみならば、結果を複数件数と同様に配列形式へ変換
       var rests = [];
-      if (gnavi_body.total_hit_count == 1) {
+      if (gnavi_body.total_hit_count === 1) {
         rests.push(gnavi_body.rest);
       } else {
         for (var rest of gnavi_body.rest) {
@@ -99,11 +99,11 @@ module.exports = class HandlePizzaOrder {
         }
       }
 
+      // carouselのメッセージ作成
       for (var rest of rests) {
         columns.push({
           "thumbnailImageUrl": typeof rest.image_url.shop_image1 == 'string' ? rest.image_url.shop_image1 : url_no_image,
           "title": rest.name,
-          // 空データを回避([object Object])。title上限が60文字。
           "text": typeof rest.pr.pr_short == 'string' ? rest.pr.pr_short.substr(0, 60) : ' ',
           "actions": [{
             "type": "uri",
@@ -112,9 +112,9 @@ module.exports = class HandlePizzaOrder {
           }]
         });
         // carouselは最大5つのため、6つ以降はカット。
-        if (columns.length === 5) break;
+        if (columns.length == 5) break;
       }
-      // carouselのメッセージ作成
+
       var message = {
         "type":"template",
         "altText": "this is a carousel template",
