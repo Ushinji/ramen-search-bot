@@ -43,7 +43,7 @@ module.exports = class HandlePizzaOrder {
                   altText: `「${value}」でよろしいですか？`,
                   template: {
                     type: "confirm",
-                    text: `「${value}」でよろしいですか？`,
+                    text: `場所は「${value}」でよろしいですか？`,
                     actions: [
                       {type: "message", label: "はい", text: "はい"},
                       {type: "message", label: "いいえ", text: "いいえ"}
@@ -87,17 +87,19 @@ module.exports = class HandlePizzaOrder {
       // カルーセル型メッセージ作成
       var columns = [];
       var url_no_image = 'https://ramen-search-bot.herokuapp.com/public/images/no_image.png';
-      console.log(url_no_image);
+      console.log(`body.rest:${JSON.stringify(gnavi_body)}`);
 
-      for (var rest of gnavi_body.rest) {
-        console.log( `pr_short:${typeof rest.pr.pr_short}` );
-        console.log( `url_img:${typeof rest.image_url.shop_image1}` );
-        if( rest.pr.pr_short )  console.log(`pr_short true`);
-        else                    console.log('pr_short false');
+      // 結果が一件のみならば、結果を複数件数と同様に配列形式へ変換
+      var rests = [];
+      if (gnavi_body.total_hit_count == 1) {
+        rests.push(gnavi_body.rest);
+      } else {
+        for (var rest of gnavi_body.rest) {
+          rests.push(rest);
+        }
+      }
 
-        if( rest.image_url.shop_image1 )  console.log(`shop_image1 true`);
-        else                              console.log('shop_image1 false');
-
+      for (var rest of rests) {
         columns.push({
           "thumbnailImageUrl": typeof rest.image_url.shop_image1 == 'string' ? rest.image_url.shop_image1 : url_no_image,
           "title": rest.name,
@@ -122,6 +124,7 @@ module.exports = class HandlePizzaOrder {
         }
       };
       console.log(`reply-msg:${JSON.stringify(message)}`);
+
       // 最終的な応答を返す
       return bot.reply(message).then(
         (response) => {
@@ -141,7 +144,6 @@ module.exports = class HandlePizzaOrder {
         if('error' in body){
           console.log("検索エラー");
         }
-        console.log("body.rest:" + JSON.stringify(body));
       } else {
         console.log('error: '+ response.statusCode);
       }
